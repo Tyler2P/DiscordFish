@@ -3,6 +3,7 @@ import pyautogui
 import keyboard
 import random
 import decimal
+from plyer import notification
 
 funcShouldStop = False
 humanVerification = False
@@ -42,9 +43,21 @@ def toggleStop():
     if funcShouldStop == False:
         print("Stopping automation")
         funcShouldStop = True
+        notification.notify(
+            title = "Stopping Automation",
+            message = "The automation has been stopped",
+            app_icon = None,
+            timeout = 10,
+        )
     else:
         print("Resuming automation")
         funcShouldStop = False
+        notification.notify(
+            title = "Resuming Automation",
+            message = "The automation has been resumed",
+            app_icon = None,
+            timeout = 10,
+        )
 
 # Bind the 'esc' key to the stop function
 keyboard.add_hotkey('esc', toggleStop)
