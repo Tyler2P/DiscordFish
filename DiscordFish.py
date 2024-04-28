@@ -7,6 +7,7 @@ from plyer import notification
 
 funcShouldStop = False
 humanVerification = False
+cooldown=3
 
 def checkHumanVerification():
     global humanVerification
@@ -67,8 +68,8 @@ while True:
     if funcShouldStop == False:
         # Run the button-clicking function
         clickButton()
-        # Check if the human verification prompt has appeard
+        # Check if the human verification prompt has appeared
         checkHumanVerification()
 
-        # Pause for a random amount of seconds between 3 and 4
-        time.sleep(float(decimal.Decimal(random.randrange(3, 4))))
+        # Pause for a random amount of seconds between cooldown and cooldown + 1
+        time.sleep(float(decimal.Decimal(random.randrange(cooldown, cooldown + 1))))
