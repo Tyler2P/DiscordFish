@@ -9,7 +9,7 @@ funcShouldStop = False
 humanVerification = False
 humanVerificationTime = None
 verificationCompleteTime = None
-cooldown=4
+cooldown=3
 
 def checkHumanVerification():
     global humanVerification
@@ -26,6 +26,7 @@ def checkHumanVerification():
 
     if captchaEmbed is not None:
         print("humanVerify")
+        humanVerification = True
         return toggleStop()
     
     # Find an embed explaining that a captcha is present
@@ -33,12 +34,18 @@ def checkHumanVerification():
 
     if verifyEmbed is not None:
         print("humanVerify")
+        humanVerification = True
         return toggleStop()
 
 def checkIfVerified():
-    verifyCompleteMsg = pyautogui.locateOnScreen("verify_complete.png", grayscale=False, confidence=0.5)
+    global verificationCompleteTime
+
+    print("Checking if verification is complete")
+    verifyCompleteMsg = pyautogui.locateOnScreen("verify_complete.png", grayscale=False, confidence=0.7)
 
     if verifyCompleteMsg is not None:
+        # Save current time
+        verificationCompleteTime = time.time()
         print("verificationComplete")
         return toggleStop()
 
