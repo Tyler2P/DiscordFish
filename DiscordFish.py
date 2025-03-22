@@ -7,10 +7,19 @@ from plyer import notification
 
 funcShouldStop = False
 humanVerification = False
-cooldown=3
+humanVerificationTime = None
+verificationCompleteTime = None
+cooldown=4
 
 def checkHumanVerification():
     global humanVerification
+
+    # Get current time
+    current_time = time.time()
+
+    # Check if verificationCompleteTime is within the last (cooldown * 20) seconds
+    if verificationCompleteTime is not None and (current_time - verificationCompleteTime) <= (cooldown * 20):
+        return  # Exit function early
     
     # Check if there is a verify captcha is visible
     captchaEmbed = pyautogui.locateOnScreen("captcha_embed.png", grayscale=True, confidence=0.5)
@@ -24,6 +33,13 @@ def checkHumanVerification():
 
     if verifyEmbed is not None:
         print("humanVerify")
+        return toggleStop()
+
+def checkIfVerified():
+    verifyCompleteMsg = pyautogui.locateOnScreen("verify_complete.png", grayscale=False, confidence=0.5)
+
+    if verifyCompleteMsg is not None:
+        print("verificationComplete")
         return toggleStop()
 
 def clickButton():
@@ -48,7 +64,7 @@ def toggleStop():
             title = "Stopping Automation",
             message = "The automation has been stopped",
             app_icon = None,
-            timeout = 10,
+            timeout = 10
         )
     else:
         print("Resuming automation")
@@ -57,7 +73,7 @@ def toggleStop():
             title = "Resuming Automation",
             message = "The automation has been resumed",
             app_icon = None,
-            timeout = 10,
+            timeout = 10
         )
 
 # Bind the 'esc' key to the stop function
@@ -73,3 +89,7 @@ while True:
 
         # Pause for a random amount of seconds between cooldown and cooldown + 1
         time.sleep(float(decimal.Decimal(random.randrange(cooldown, cooldown + 1))))
+    elif humanVerification == True:
+        # Pause for a 5 minutes
+        time.sleep(300)
+        checkIfVerified()
